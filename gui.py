@@ -1,4 +1,5 @@
 import tkinter as tk
+import pyautogui as pya
 
 class Main:
     def __init__(self):
@@ -18,6 +19,8 @@ class Main:
 
     def update(self,language):
         self.root.label.configure(text=f"{language}")
+        x, y = pya.position()
+        self.root.geometry(f"+{x}+{y}")
         
     def start_move(self, event):
         self.x = event.x

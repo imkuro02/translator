@@ -1,9 +1,17 @@
 from pynput.mouse import Listener as MouseListener
 from pynput.keyboard import Listener as KeyboardListener
-import pyautogui
-import pyperclip 
 import threading
 import gui
+from time import sleep
+import subprocess
+import shlex
+
+def copy():
+    sleep(.1) # a little delay helps prevent selecting previously selecting text
+    sselected_text = subprocess.check_output((shlex.split('xclip -i /dev/null'))) # empty it
+    selected_text = subprocess.check_output((shlex.split('xclip -out -selection')))
+    print('copied : ', selected_text)
+    return(selected_text)
 
 class Keylogger:
     def __init__(self,main_gui):
@@ -28,14 +36,11 @@ class Keylogger:
         #print('Pointer moved to {0}'.format((x, y)))
 
     def on_click(self, x, y, button, pressed):
-        print('{0} at {1}'.format('Pressed' if pressed else 'Released',(x, y)))
+        #print('{0} at {1}'.format('Pressed' if pressed else 'Released',(x, y)))
         
         if not pressed:
-            old_clip = pyperclip.paste()   # copy old clip
-            pyautogui.hotkey('ctrl', 'c')  # copy new content
-            new_clip = pyperclip.paste()   # put new content in new_clip var
-            pyperclip.copy(old_clip)       # set old clip back into clipboard
-            self.main_gui.update(new_clip) # set new_clip as text
+            text = copy().decode('utf-8')
+            self.main_gui.update(text) # set new_clip as hext
 
 def main():
     main_gui = gui.Main()
