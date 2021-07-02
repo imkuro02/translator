@@ -6,21 +6,34 @@ class Main:
         self.root = tk.Tk()
         self.root.attributes("-topmost", 1)
         self.root.overrideredirect(True)
-        self.root.label=tk.Label(self.root,text="b\ne\nf\no\nr\ne\n.")
-        self.root.label.pack(fill=tk.BOTH, expand=True)
+
+        self.root.label_src=tk.Label(self.root,text="src")
+        self.root.label_origin=tk.Label(self.root,text="origin")
+        self.root.label_text=tk.Label(self.root,text="text")
+
+        self.root.label_src.pack(fill=tk.BOTH, expand=True)
+        self.root.label_origin.pack(fill=tk.BOTH, expand=True)
+        self.root.label_text.pack(fill=tk.BOTH, expand=True)
         # movements
         self.root.bind("<ButtonPress-1>", self.start_move)
         self.root.bind("<ButtonRelease-1>", self.stop_move)
         self.root.bind("<B1-Motion>", self.do_move)
+        self.root.bind('<Double-Button-1>', self.hide)
         #self.root.after(2000,self.update)
 
     def start(self):
         self.root.mainloop()
 
-    def update(self,language):
-        self.root.label.configure(text=f"{language}")
+    def hide(self, event):
+        self.root.withdraw()
+
+    def update(self,text):
+        self.root.label_src.configure(text=f"{text.src}")
+        self.root.label_origin.configure(text=f"{text.origin}")
+        self.root.label_text.configure(text=f"{text.text}")
         x, y = pya.position()
         self.root.geometry(f"+{x}+{y}")
+        self.root.deiconify()
         
     def start_move(self, event):
         self.x = event.x

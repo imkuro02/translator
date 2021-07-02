@@ -5,6 +5,10 @@ import gui
 from time import sleep
 import subprocess
 import shlex
+from googletrans import Translator
+translator = Translator()
+default_src = 'en'
+
 
 def copy():
     sleep(.1) # a little delay helps prevent selecting previously selecting text
@@ -40,7 +44,9 @@ class Keylogger:
         
         if not pressed:
             text = copy().decode('utf-8')
-            self.main_gui.update(text) # set new_clip as hext
+            result = translator.translate(text,dest=default_src) # just use english
+            if result.src != default_src:
+                self.main_gui.update(result) # set new_clip as hext
 
 def main():
     main_gui = gui.Main()
